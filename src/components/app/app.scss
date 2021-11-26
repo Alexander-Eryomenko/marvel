@@ -1,0 +1,43 @@
+.container {
+  width: 700px;
+  margin: 0 auto;
+}
+
+.header {
+  height: 100px;
+  margin: 0 auto;
+}
+.main {
+  margin-top: 30px;
+}
+
+.page {
+  margin-top: 50px;
+}
+.btn-pages {
+  display: flex;
+    justify-content: center;
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 30px;
+    background-color: darkviolet;
+    text-decoration: none;
+    color: gold;
+    text-align: center;
+    border-radius: 30px;
+      &:hover {
+      background-color: greenyellow;
+      color: orangered;
+    }
+    &-page3 {
+      margin-left: 40px;
+    }
+  }
+}
+
+body {
+  background: grey;
+}
