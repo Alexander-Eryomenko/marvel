@@ -6,10 +6,12 @@ export class Header extends React.Component {
   render() {
     return (
       
-        <div className="container">
-        <div className="header__img">
-          <img src={logo} alt="Marvel logo" />
-        </div>
+        <div className="header">
+            <div className="container">
+              <div className="header__img">
+                <img src={logo} alt="Marvel logo" />
+              </div>
+            </div>
         </div>
       
     )

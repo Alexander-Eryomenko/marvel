@@ -1,23 +1,8 @@
-.heroes {
+.main__content {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  &__avatar {
-    width: 100px;
-    height: 100px;
-    background-color: red;
-    border-radius: 50%;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-  }
-  
-  &__info {
-    margin-left: 40px;
-  }
-  &__btn {
-    
-  }
+  flex-direction: column;
+  row-gap: 15px;
+  overflow: auto;
+  height: 675px;
+  margin-top: 30px;
 }

@@ -1,45 +1,34 @@
 import React from "react"
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom"
-import './app.scss'
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import { Header } from '../header'
-import { SearchPanel } from '../search-panel'
-import { Content } from "../content"
-import { Page2 } from "../page2"
-import { Page3 } from '../page3'
+import { Home } from '../Home'
+import { PageError } from "../PageError"
+import { ComicsPage } from '../ComicsPage'
+import './app.scss'
 
-const Btn = () => {
-  return (
-    <div className="btn-pages container">
-      <Link className="btn-pages__link" to="/page2/:4">Page2</Link>
-      <Link className="btn-pages__link btn-pages__link-page3" to="/page3">Page3</Link>
-    </div>
-  )
-}
+// MarvelApi.getCharacters()
+// MarvelApi.getCharactersById(1010699)
+// MarvelApi.getComicsByCharacterId(1010699)
+
+
+
 
 
 export class App extends React.Component {
   render() {
     return (
-      <div>
-        <div className="header">
+        <>
         <Header/>
-        </div>
-        <SearchPanel/>
-          <main className="main">
-          <Content/>
-            <div className="page">
-              
+
               <Router>
-              <Btn/>
                 <Switch>
-                  <Route path="/page2" component={Page2} />
-                  <Route path="/page3" component={Page3} />
+                  <Route exact path="/comics/:id" component={ComicsPage} />
+                  <Route exact path="/" component={Home} />
+                  <Route path="*" component={PageError} />
                 </Switch>
               </Router>
-            </div>
-          </main>
-        
-      </div>
+
+        </>
     )
   }
 }
