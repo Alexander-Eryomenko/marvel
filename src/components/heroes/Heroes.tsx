@@ -2,6 +2,7 @@ import React from "react"
 import { MarvelApi } from "../MarvelApi"
 import { SearchPanel } from '../search-panel'
 import { HeroesItem } from "../HeroesItem"
+import { Spinner } from '../Spinner'
 import './heroes.scss'
 import { Hero } from "../../types/hero"
 
@@ -9,6 +10,7 @@ import { Hero } from "../../types/hero"
 
 interface IState {
   heroes: Array<Hero>
+  isLoading: boolean
 }
 
 export class Heroes extends React.Component<any, IState> {
@@ -16,14 +18,22 @@ export class Heroes extends React.Component<any, IState> {
   constructor (props: any) {
     super(props)
     this.state = {
-      heroes: []
+      heroes: [],
+      isLoading: false
     }
   }
 
   componentDidMount() {
+    this.setState({
+      isLoading: true
+    })
     MarvelApi.getCharacters().then(data => {
       this.setState({
         heroes: data
+      })
+    }).finally(() => {
+      this.setState({
+        isLoading: false
       })
     })
   }
@@ -31,11 +41,14 @@ export class Heroes extends React.Component<any, IState> {
   
 
   render() {
+    const { isLoading } = this.state
     return (
       <div className="container">
         <SearchPanel />
         <div className="main__content">
-        {this.state.heroes?.map(hero => <HeroesItem key={hero.id} hero={hero}/>)}
+        { isLoading ? <Spinner/> : <>
+          {this.state.heroes?.map(hero => <HeroesItem key={hero.id} hero={hero}/>)}
+          </> }
         </div>
       </div>
     )

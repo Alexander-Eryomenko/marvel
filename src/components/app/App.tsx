@@ -6,10 +6,6 @@ import { PageError } from "../PageError"
 import { ComicsPage } from '../ComicsPage'
 import './app.scss'
 
-// MarvelApi.getCharacters()
-// MarvelApi.getCharactersById(1010699)
-// MarvelApi.getComicsByCharacterId(1010699)
-
 
 
 
@@ -19,7 +15,6 @@ export class App extends React.Component {
     return (
         <>
         <Header/>
-
               <Router>
                 <Switch>
                   <Route exact path="/comics/:id" component={ComicsPage} />

@@ -3,9 +3,11 @@ import './comics-page.scss'
 import { withRouter } from 'react-router-dom'
 import { Comic, IThumbnail } from "../../types/hero";
 import { MarvelApi } from "../MarvelApi";
+import { Spinner } from '../Spinner'
 
 interface IState {
   comics: Array<Comic>
+  isLoading: boolean
 }
 
 interface IComicPageItemProps {
@@ -39,20 +41,29 @@ class ComicsPage extends React.Component<any, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
-      comics: []
+      comics: [],
+      isLoading: false
     }
   }
 
   componentDidMount() {
+    this.setState({
+      isLoading: true
+    })
     const {id} = this.props.match.params
     MarvelApi.getComicsByCharacterId(id).then(data => {
       this.setState({
         comics: data
       })
+    }).finally(() => {
+      this.setState({
+        isLoading: false
+      })
     })
   }
 
   render() {
+    const { isLoading } = this.state
     const title = () => {
       return this.state.comics.map(item => {
         return item.title
@@ -67,7 +78,9 @@ class ComicsPage extends React.Component<any, IState> {
           {title}
         </h2>
         <div className="comics-page__content">
-        {this.state.comics?.map((comic) => <ComicsPageItem key={comic.id} thumbnail={comic.thumbnail} description={comic.description}/>)}
+        { isLoading ? <Spinner /> : <>
+          {this.state.comics?.map((comic) => <ComicsPageItem key={comic.id} thumbnail={comic.thumbnail} description={comic.description}/>)}
+        </> }
         </div>
       </div>
       </div>
