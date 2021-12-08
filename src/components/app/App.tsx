@@ -4,6 +4,7 @@ import { Header } from '../header'
 import { Home } from '../Home'
 import { PageError } from "../PageError"
 import { ComicsPage } from '../ComicsPage'
+import { Box } from '@mui/material'
 import './app.scss'
 
 
@@ -13,17 +14,18 @@ import './app.scss'
 export class App extends React.Component {
   render() {
     return (
-        <>
-        <Header/>
-              <Router>
-                <Switch>
-                  <Route exact path="/comics/:id" component={ComicsPage} />
-                  <Route exact path="/" component={Home} />
-                  <Route path="*" component={PageError} />
-                </Switch>
-              </Router>
+        <Box height="100vh" bgcolor="primary.main">
+        
+          <Router>
+            <Header/>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/comics/:id" component={ComicsPage} />
+              <Route path="*" component={PageError} />
+            </Switch>
+          </Router>
 
-        </>
+        </Box>
     )
   }
 }

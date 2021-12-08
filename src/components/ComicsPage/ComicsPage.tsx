@@ -1,9 +1,10 @@
 import React from "react";
-import './comics-page.scss'
 import { withRouter } from 'react-router-dom'
 import { Comic, IThumbnail } from "../../types/hero";
 import { MarvelApi } from "../MarvelApi";
 import { Spinner } from '../Spinner'
+
+import './comics-page.scss'
 
 interface IState {
   comics: Array<Comic>
@@ -64,22 +65,17 @@ class ComicsPage extends React.Component<any, IState> {
 
   render() {
     const { isLoading } = this.state
-    const title = () => {
-      return this.state.comics.map(item => {
-        return item.title
-      })
-    }
     
     return (
       <>
       <div className="container">
       <div className="comics-page">
         <h2 className="comics-page__title">
-          {title}
+          Comics
         </h2>
         <div className="comics-page__content">
         { isLoading ? <Spinner /> : <>
-          {this.state.comics?.map((comic) => <ComicsPageItem key={comic.id} thumbnail={comic.thumbnail} description={comic.description}/>)}
+          {this.state.comics.map((comic) => <ComicsPageItem key={comic.id} thumbnail={comic.thumbnail} description={comic.description}/>)}
         </> }
         </div>
       </div>

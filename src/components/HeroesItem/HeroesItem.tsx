@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from 'react-router-dom'
 import { Hero } from "../../types/hero";
 import './heroesItem.scss'
-import { MarvelApi } from "../MarvelApi";
 
 interface IProps {
   hero: Hero

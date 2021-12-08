@@ -1,1 +1,2 @@
-export { Heroes } from './Heroes'
+import Heroes from './Heroes'
+export {Heroes}
