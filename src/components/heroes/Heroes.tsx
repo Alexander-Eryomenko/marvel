@@ -13,6 +13,7 @@ import './heroes.scss'
 interface IState {
   heroes: Array<Hero>
   isLoading: boolean
+  search: string
 }
 
 class Heroes extends React.Component<any, IState> {
@@ -22,6 +23,7 @@ class Heroes extends React.Component<any, IState> {
     this.state = {
       heroes: [],
       isLoading: false,
+      search: ''
     }
   }
 
@@ -29,7 +31,7 @@ class Heroes extends React.Component<any, IState> {
     this.setState({
       isLoading: true
     })
-    MarvelApi.getCharacters(this.getSearchValue()).then(data => {
+    MarvelApi.getCharacters(this.state.search).then(data => {
       this.setState({
         heroes: data
       })
@@ -41,28 +43,47 @@ class Heroes extends React.Component<any, IState> {
   }
 
   componentDidMount() {
-    this.getCharacter()
+    new Promise(resolve => {
+      resolve(this.getSearchValue())
+    }).then(() => {this.getCharacter()})
   }
+
+  componentDidUpdate(prevProps:any) {
+    if (this.props.location.search !== prevProps.location.search) {
+      
+      this.getCharacter()
+    }
+    
+  }
+
 
   getSearchValue = () => {
     const search = queryString.parse(this.props.location.search)
     const { query } = search
-    return query?.toString() || ''
+    if(this.state.search !== query) {
+      this.setState((prev) => ({
+        ...prev, search: query?.toString() || ''
+      })
+      
+      )}
+  }
+  onInput = (event: any) => {
+    this.setState({
+      search: event.target.value
+    })
   }
 
-  handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.props.history.push(`?query=${event.target.value}`)
-    
-  }
- onSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+  handleSearch = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
-      this.getCharacter()
-    }
+    this.props.history.push(`?query=${this.state.search}`)
+    // this.getCharacter()
+  }
+
   render() {
     const { isLoading } = this.state
     return (
       <div className="container">
-        <SearchPanel onSubmit={this.onSubmit} onChange={this.handleSearch} value={this.getSearchValue()} />
+        <SearchPanel onSubmit={this.handleSearch} onChange={this.onInput} value={this.state.search} />
         <div className="main__content">
         { isLoading ? <Spinner/> : <>
           {this.state.heroes.map(hero => <HeroesItem key={hero.id} hero={hero}/>)}

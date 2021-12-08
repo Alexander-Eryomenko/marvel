@@ -1,12 +1,14 @@
 import React from 'react'
-import Button from '@mui/material/Button';
-import { Input } from '@mui/material';
+import { Input, Button } from '@mui/material';
 import './search.scss'
+
+
 
 interface IProps {
   value: string
-  onChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
-  onSubmit: (event:React.SyntheticEvent<HTMLFormElement>) => void
+  // onChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+  onSubmit: (event: any) => void
+  onChange: (event: any) => void
 }
 
 export class SearchPanel extends React.Component<IProps, any> {
@@ -25,17 +27,17 @@ export class SearchPanel extends React.Component<IProps, any> {
         <div className="search-panel__wrapper">
 
           <div className="search-panel__input">
-            <Input size="medium" onChange={this.props.onChange} value={this.props.value} placeholder="Search" type="text" />
+            <Input color="primary" size="small" onChange={this.props.onChange} value={this.props.value} placeholder="Search" type="text" />
           </div>
 
           <div className="search-panel__wrapper-btn">
 
             <div className="search-panel__btn-sort">
-              <Button>sort by</Button>
+              <Button variant="contained" size="small">sort by</Button>
             </div>
 
           <div className="search-panel__btn-search">
-            <Button type="submit" variant="contained">
+            <Button size="small" type="submit" variant="contained">
             Search btn
             </Button>
           </div>

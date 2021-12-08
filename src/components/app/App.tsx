@@ -14,7 +14,7 @@ import './app.scss'
 export class App extends React.Component {
   render() {
     return (
-        <Box height="100vh" bgcolor="primary.main">
+        <>
         
           <Router>
             <Header/>
@@ -24,8 +24,8 @@ export class App extends React.Component {
               <Route path="*" component={PageError} />
             </Switch>
           </Router>
-
-        </Box>
+</>
+        
     )
   }
 }

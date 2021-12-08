@@ -8,8 +8,10 @@ export class MarvelApi {
   static hash = process.env.REACT_APP_HASH
 
   static async getCharacters (nameCharacter?: string) {
-    let url = `${MarvelApi.url}characters?ts=1&apikey=${MarvelApi.publicApiKey}&hash=${MarvelApi.hash}`
+    console.log(nameCharacter)
+    let url = `${MarvelApi.url}characters?ts=1&apikey=${MarvelApi.publicApiKey}&hash=${MarvelApi.hash}&limit=5`
     if (nameCharacter) {
+      
       url += `&nameStartsWith=${nameCharacter}`
     }
     const response = await axios.get(url)
