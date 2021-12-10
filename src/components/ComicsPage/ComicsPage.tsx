@@ -16,29 +16,7 @@ interface IComicPageItemProps {
   thumbnail: IThumbnail
 }
 
-
-
-
-const ComicsPageItem = (props: IComicPageItemProps) => {
-  const { description, thumbnail } = props
-
-  return (
-    <>
-      <div className="comics-page__item">
-        <div className="comics-page__item-img">
-          <img src={`${thumbnail.path}.${thumbnail.extension}`} alt="img" />
-        </div>
-        <div className="comics-page__item-descr">
-          {description}
-        </div>
-      </div>
-    </>
-  )
-}
-
-
 class ComicsPage extends React.Component<any, IState> {
-  
   constructor(props: any) {
     super(props)
     this.state = {
@@ -65,7 +43,6 @@ class ComicsPage extends React.Component<any, IState> {
 
   render() {
     const { isLoading } = this.state
-    
     return (
       <>
       <div className="container">
@@ -84,5 +61,24 @@ class ComicsPage extends React.Component<any, IState> {
     )
   }
 }
+
+const ComicsPageItem = (props: IComicPageItemProps) => {
+  const { description, thumbnail } = props
+  return (
+    <>
+      <div className="comics-page__item">
+        <div className="comics-page__item-img">
+          <img src={`${thumbnail.path}.${thumbnail.extension}`} alt="img" />
+        </div>
+        <div className="comics-page__item-descr">
+          {description}
+        </div>
+      </div>
+    </>
+  )
+}
+
+
+
 
 export default withRouter(ComicsPage) 

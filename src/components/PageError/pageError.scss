@@ -1,7 +1,19 @@
 .img-wrapper {
+  position: relative;
   margin-top: 20px;
   img {
     width: 100%;
     height: 100%;
+  }
+  .error-path {
+    position: absolute;
+    top: 130px;
+    left: 108px;
+    color: seagreen;
+    font-size: 20px;
+    .span-path {
+      color: red;
+      font-size: 25px;
+    }
   }
 }

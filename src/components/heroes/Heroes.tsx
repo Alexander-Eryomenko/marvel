@@ -1,6 +1,6 @@
 import React from "react"
 import { MarvelApi } from "../MarvelApi"
-import { SearchPanel } from '../search-panel'
+import { SearchPanel } from '../SearchPanel'
 import { HeroesItem } from "../HeroesItem"
 import { Spinner } from '../Spinner'
 import { Hero } from "../../types/hero"
@@ -9,7 +9,6 @@ import queryString from 'query-string'
 
 import './heroes.scss'
 
-
 interface IState {
   heroes: Array<Hero>
   isLoading: boolean
@@ -17,7 +16,6 @@ interface IState {
 }
 
 class Heroes extends React.Component<any, IState> {
-  
   constructor (props: any) {
     super(props)
     this.state = {
@@ -43,30 +41,27 @@ class Heroes extends React.Component<any, IState> {
   }
 
   componentDidMount() {
-    new Promise(resolve => {
-      resolve(this.getSearchValue())
-    }).then(() => {this.getCharacter()})
+    this.getSearchValue()
   }
 
   componentDidUpdate(prevProps:any) {
     if (this.props.location.search !== prevProps.location.search) {
-      
       this.getCharacter()
     }
     
   }
 
-
   getSearchValue = () => {
     const search = queryString.parse(this.props.location.search)
     const { query } = search
     if(this.state.search !== query) {
-      this.setState((prev) => ({
-        ...prev, search: query?.toString() || ''
-      })
+      this.setState({
+        search: query?.toString() || ''
+      }, () => this.getCharacter())
       
-      )}
+    }
   }
+  
   onInput = (event: any) => {
     this.setState({
       search: event.target.value
@@ -76,7 +71,6 @@ class Heroes extends React.Component<any, IState> {
   handleSearch = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.props.history.push(`?query=${this.state.search}`)
-    // this.getCharacter()
   }
 
   render() {

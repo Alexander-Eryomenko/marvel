@@ -8,7 +8,6 @@ export class MarvelApi {
   static hash = process.env.REACT_APP_HASH
 
   static async getCharacters (nameCharacter?: string) {
-    console.log(nameCharacter)
     let url = `${MarvelApi.url}characters?ts=1&apikey=${MarvelApi.publicApiKey}&hash=${MarvelApi.hash}&limit=5`
     if (nameCharacter) {
       
@@ -26,7 +25,7 @@ export class MarvelApi {
   }
   
   static async getComicsByCharacterId(characterId: number): Promise<Array<Comic>> {
-      const response = await axios.get(`${MarvelApi.url}characters/${characterId}/comics?ts=1&apikey=${MarvelApi.publicApiKey}&hash=${MarvelApi.hash}`)
+      const response = await axios.get(`${MarvelApi.url}characters/${characterId}/comics?ts=1&apikey=${MarvelApi.publicApiKey}&hash=${MarvelApi.hash}&limit=20`)
       const data = await response.data.data.results
       return data
   }

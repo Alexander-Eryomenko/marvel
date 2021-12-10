@@ -4,10 +4,8 @@ import logo from '../../img/marvel-logo.png'
 
 import './header.scss'
 
-export class Header extends React.Component {
-  render() {
+export const Header = () => {
     return (
-      
         <div className="header">
             <div className="container">
               <div className="header__img">
@@ -17,7 +15,5 @@ export class Header extends React.Component {
               </div>
             </div>
         </div>
-      
     )
   }
-}
