@@ -1,91 +1,111 @@
-import React from "react"
-import { MarvelApi } from "../MarvelApi"
-import { SearchPanel } from '../SearchPanel'
-import { HeroesItem } from "../HeroesItem"
-import { Spinner } from '../Spinner'
-import { Hero } from "../../types/hero"
-import { withRouter } from "react-router-dom"
-import queryString from 'query-string'
+import React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { requestHeroesInfo } from "../../redux/actions/actionsHeroesPage";
+import { SearchPanel } from "../SearchPanel";
+import { HeroesItem } from "../HeroesItem";
+import { Spinner } from "../Spinner";
+import { Hero } from "../../types/hero";
+import { RootState } from "../../redux/store";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import queryString from "query-string";
 
-import './heroes.scss'
+import "./heroes.scss";
 
-interface IState {
-  heroes: Array<Hero>
-  isLoading: boolean
-  search: string
+interface IProps extends RouteComponentProps {
+  heroes: Array<Hero>;
+  isLoading: boolean;
+  requestHeroesInfo: (search: string) => void;
 }
 
-class Heroes extends React.Component<any, IState> {
-  constructor (props: any) {
-    super(props)
+interface IState {
+  search: string;
+}
+
+class Heroes extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
     this.state = {
-      heroes: [],
-      isLoading: false,
-      search: ''
-    }
+      search: "",
+    };
   }
 
   getCharacter = () => {
-    this.setState({
-      isLoading: true
-    })
-    MarvelApi.getCharacters(this.state.search).then(data => {
-      this.setState({
-        heroes: data
-      })
-    }).finally(() => {
-      this.setState({
-        isLoading: false
-      })
-    })
-  }
+    const { requestHeroesInfo } = this.props;
+    requestHeroesInfo(this.state.search);
+  };
 
   componentDidMount() {
-    this.getSearchValue()
+    this.getSearchValue();
   }
 
-  componentDidUpdate(prevProps:any) {
+  componentDidUpdate(prevProps: IProps) {
     if (this.props.location.search !== prevProps.location.search) {
-      this.getCharacter()
+      this.getCharacter();
     }
-    
   }
 
   getSearchValue = () => {
-    const search = queryString.parse(this.props.location.search)
-    const { query } = search
-    if(this.state.search !== query) {
-      this.setState({
-        search: query?.toString() || ''
-      }, () => this.getCharacter())
-      
+    const search = queryString.parse(this.props.location.search);
+    const { query } = search;
+    if (this.state.search !== query) {
+      this.setState(
+        {
+          search: query?.toString() || "",
+        },
+        () => this.getCharacter()
+      );
     }
-  }
-  
-  onInput = (event: any) => {
+  };
+
+  onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      search: event.target.value
-    })
-  }
+      search: event.target.value,
+    });
+  };
 
   handleSearch = (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    this.props.history.push(`?query=${this.state.search}`)
-  }
+    event.preventDefault();
+    this.props.history.push(`?query=${this.state.search}`);
+  };
 
   render() {
-    const { isLoading } = this.state
+    const { isLoading, heroes } = this.props;
     return (
       <div className="container">
-        <SearchPanel onSubmit={this.handleSearch} onChange={this.onInput} value={this.state.search} />
+        <SearchPanel
+          onSubmit={this.handleSearch}
+          onChange={this.onChange}
+          value={this.state.search}
+        />
         <div className="main__content">
-        { isLoading ? <Spinner/> : <>
-          {this.state.heroes.map(hero => <HeroesItem key={hero.id} hero={hero}/>)}
-          </> }
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              {heroes.map((hero) => (
+                <HeroesItem key={hero.id} hero={hero} />
+              ))}
+            </>
+          )}
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default withRouter(Heroes)
+const mapStateToProps = (state: RootState) => {
+  return {
+    heroes: state.heroes.heroes,
+    isLoading: state.heroes.isLoading,
+    error: state.heroes.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    requestHeroesInfo: (search: string) => dispatch(requestHeroesInfo(search)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Heroes));

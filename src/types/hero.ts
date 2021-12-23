@@ -9,9 +9,4 @@ export type Hero = {
   thumbnail: IThumbnail
 }
 
-export type Comic = {
-  description: string
-  thumbnail: IThumbnail
-  id: number
-  title: string
-}
+export type Comic = Hero
