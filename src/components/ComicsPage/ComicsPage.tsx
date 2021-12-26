@@ -77,7 +77,7 @@ const ComicsPageItem = (props: IComicPageItemProps) => {
         <div className="comics-page__item-img">
           <img src={`${srcImgComics}`} alt="img" />
         </div>
-        <div className="comics-page__item-descr">{description}</div>
+        <div className="comics-page__item-descr">{description ? description : 'No description'}</div>
       </div>
     </>
   );
