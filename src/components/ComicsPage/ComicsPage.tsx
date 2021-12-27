@@ -1,21 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { RootState } from "../../redux/store";
+import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { requestComicsInfo } from "../../redux/actions/actionsComicsPage";
 import { Comic, IThumbnail } from "../../types/hero";
 import { Spinner } from "../Spinner";
 
 import "./comics-page.scss";
-import { RootState } from "../../redux/store";
-import { Dispatch } from "redux";
+
 
 interface IParamsRouter {
   id: string;
-}
-
-interface IState {
-  comics: Array<Comic>;
-  isLoading: boolean;
 }
 
 interface IProps extends RouteComponentProps<IParamsRouter> {
@@ -30,17 +26,12 @@ interface IComicPageItemProps {
   thumbnail: IThumbnail;
 }
 
-class ComicsPage extends React.Component<IProps, IState> {
-
-  componentDidMount() {
-    console.log(this.props);
-    const { requestComicsInfo } = this.props;
-    const { id } = this.props.match.params;
+const ComicsPage = (props: IProps) => {
+  const {requestComicsInfo, isLoading, comics} = props
+  const { id } = props.match.params;
+  useEffect(() => {
     requestComicsInfo(id);
-  }
-
-  render() {
-    const { isLoading, comics } = this.props;
+  }, [id])
     return (
       <>
         <div className="container">
@@ -65,7 +56,6 @@ class ComicsPage extends React.Component<IProps, IState> {
         </div>
       </>
     );
-  }
 }
 
 const ComicsPageItem = (props: IComicPageItemProps) => {

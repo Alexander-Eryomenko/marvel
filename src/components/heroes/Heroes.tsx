@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { requestHeroesInfo } from "../../redux/actions/actionsHeroesPage";
@@ -15,68 +15,43 @@ import "./heroes.scss";
 interface IProps extends RouteComponentProps {
   heroes: Array<Hero>;
   isLoading: boolean;
-  requestHeroesInfo: (search: string) => void;
+  requestHeroesInfo: (search?: string) => void;
 }
 
-interface IState {
-  search: string;
-}
+const Heroes = (props: IProps) => {
+  const { isLoading, heroes, requestHeroesInfo } = props;
+  const [search, setSearch] = useState('')
 
-class Heroes extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      search: "",
-    };
-  }
+  const locationSearch = queryString.parse(props.location.search)
+  const { query } = locationSearch
 
-  getCharacter = () => {
-    const { requestHeroesInfo } = this.props;
-    requestHeroesInfo(this.state.search);
-  };
-
-  componentDidMount() {
-    this.getSearchValue();
-  }
-
-  componentDidUpdate(prevProps: IProps) {
-    if (this.props.location.search !== prevProps.location.search) {
-      this.getCharacter();
+  useEffect(() => {
+    if(typeof query === 'string') {
+      setSearch(query)
+      requestHeroesInfo(query)
+    } else {
+      requestHeroesInfo()
+      setSearch('')
     }
+    
+  }, [query])
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value)
   }
 
-  getSearchValue = () => {
-    const search = queryString.parse(this.props.location.search);
-    const { query } = search;
-    if (this.state.search !== query) {
-      this.setState(
-        {
-          search: query?.toString() || "",
-        },
-        () => this.getCharacter()
-      );
-    }
-  };
-
-  onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      search: event.target.value,
-    });
-  };
-
-  handleSearch = (event: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.props.history.push(`?query=${this.state.search}`);
+    props.history.push(`?query=${search}`);
+    requestHeroesInfo(search)
   };
-
-  render() {
-    const { isLoading, heroes } = this.props;
+    
     return (
       <div className="container">
         <SearchPanel
-          onSubmit={this.handleSearch}
-          onChange={this.onChange}
-          value={this.state.search}
+          onSubmit={handleSearch}
+          onChange={onChange}
+          value={search}
         />
         <div className="main__content">
           {isLoading ? (
@@ -91,7 +66,7 @@ class Heroes extends React.Component<IProps, IState> {
         </div>
       </div>
     );
-  }
+  
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -104,7 +79,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    requestHeroesInfo: (search: string) => dispatch(requestHeroesInfo(search)),
+    requestHeroesInfo: (search?: string) => dispatch(requestHeroesInfo(search)),
   };
 };
 

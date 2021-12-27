@@ -7,7 +7,7 @@ export function* watchFetchHeroes() {
   yield takeLatest(actionsHeroes.REQUEST_HEROES, fetchHeroes)
 }
 
-export function* fetchHeroes(action: ReturnType<any>): Generator<any> {
+export function* fetchHeroes(action?: ReturnType<any>): Generator<any> {
   try {
     const data = yield call(MarvelApi.getCharacters, action.payload)
     yield put(requestHeroesSuccess(data))

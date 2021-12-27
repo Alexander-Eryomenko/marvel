@@ -5,7 +5,7 @@ export enum actionsHeroes {
 }
 
 
-export const requestHeroesInfo = (search: string) => {
+export const requestHeroesInfo = (search?: string) => {
   return {
     type: actionsHeroes.REQUEST_HEROES,
     payload: search
