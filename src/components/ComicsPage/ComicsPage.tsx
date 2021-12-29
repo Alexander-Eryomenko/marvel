@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
@@ -14,7 +14,7 @@ interface IParamsRouter {
   id: string;
 }
 
-interface IProps extends RouteComponentProps<IParamsRouter> {
+interface IProps {
   comics: Array<Comic>;
   error: string;
   isLoading: boolean;
@@ -27,8 +27,8 @@ interface IComicPageItemProps {
 }
 
 const ComicsPage = (props: IProps) => {
+  const { id } = useParams<IParamsRouter>()
   const {requestComicsInfo, isLoading, comics} = props
-  const { id } = props.match.params;
   useEffect(() => {
     requestComicsInfo(id);
   }, [id])
@@ -90,4 +90,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(ComicsPage));
+)(ComicsPage);

@@ -7,23 +7,28 @@ import { HeroesItem } from "../HeroesItem";
 import { Spinner } from "../Spinner";
 import { Hero } from "../../types/hero";
 import { RootState } from "../../redux/store";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import queryString from "query-string";
 
 import "./heroes.scss";
 
-interface IProps extends RouteComponentProps {
+interface IProps {
   heroes: Array<Hero>;
   isLoading: boolean;
   requestHeroesInfo: (search?: string) => void;
 }
 
+interface ILocationRouter {
+  search: string;
+}
+
 const Heroes = (props: IProps) => {
   const { isLoading, heroes, requestHeroesInfo } = props;
-  const [search, setSearch] = useState('')
-
-  const locationSearch = queryString.parse(props.location.search)
-  const { query } = locationSearch
+  const [searchInput, setSearch] = useState('')
+  const { search } = useLocation<ILocationRouter>()
+  const history = useHistory()
+  const locationSearchQuery = queryString.parse(search)
+  const { query } = locationSearchQuery
 
   useEffect(() => {
     if(typeof query === 'string') {
@@ -42,8 +47,8 @@ const Heroes = (props: IProps) => {
 
   const handleSearch = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.history.push(`?query=${search}`);
-    requestHeroesInfo(search)
+    history.push(`?query=${searchInput}`);
+    requestHeroesInfo(searchInput)
   };
     
     return (
@@ -51,7 +56,7 @@ const Heroes = (props: IProps) => {
         <SearchPanel
           onSubmit={handleSearch}
           onChange={onChange}
-          value={search}
+          value={searchInput}
         />
         <div className="main__content">
           {isLoading ? (
@@ -83,4 +88,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Heroes));
+export default connect(mapStateToProps, mapDispatchToProps)(Heroes);
