@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { requestHeroesInfo } from "../../redux/actions/actionsHeroesPage";
@@ -7,7 +7,7 @@ import { HeroesItem } from "../HeroesItem";
 import { Spinner } from "../Spinner";
 import { Hero } from "../../types/hero";
 import { RootState } from "../../redux/store";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 
 import "./heroes.scss";
@@ -24,55 +24,54 @@ interface ILocationRouter {
 
 const Heroes = (props: IProps) => {
   const { isLoading, heroes, requestHeroesInfo } = props;
-  const [searchInput, setSearch] = useState('')
-  const { search } = useLocation<ILocationRouter>()
-  const history = useHistory()
-  const locationSearchQuery = queryString.parse(search)
-  const { query } = locationSearchQuery
+  const [searchInput, setSearchInput] = useState("");
+  const { search } = useLocation();
+  const navigate = useNavigate();
+  // const history = useHistory();
+  const locationSearchQuery = queryString.parse(search);
+  const { query } = locationSearchQuery;
 
   useEffect(() => {
-    if(typeof query === 'string') {
-      setSearch(query)
-      requestHeroesInfo(query)
+    if (typeof query === "string") {
+      setSearchInput(query);
+      requestHeroesInfo(query);
     } else {
-      requestHeroesInfo()
-      setSearch('')
+      requestHeroesInfo();
+      setSearchInput("");
     }
-    
-  }, [query])
+  }, [query]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value)
-  }
-
-  const handleSearch = (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    history.push(`?query=${searchInput}`);
-    requestHeroesInfo(searchInput)
+    setSearchInput(event.target.value);
   };
-    
-    return (
-      <div className="container">
-        <SearchPanel
-          onSubmit={handleSearch}
-          onChange={onChange}
-          value={searchInput}
-        />
-        <div className="main__content">
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <>
-              {heroes.map((hero) => (
-                <HeroesItem key={hero.id} hero={hero} />
-              ))}
-            </>
-          )}
-        </div>
+
+  const onSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    navigate(`?query=${searchInput}`);
+    requestHeroesInfo(searchInput);
+  };
+
+  return (
+    <div className="container">
+      <SearchPanel
+        onSubmit={onSubmit}
+        onChange={onChange}
+        value={searchInput}
+      />
+      <div className="main__content">
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            {heroes.map((hero) => (
+              <HeroesItem key={hero.id} hero={hero} />
+            ))}
+          </>
+        )}
       </div>
-    );
-  
-}
+    </div>
+  );
+};
 
 const mapStateToProps = (state: RootState) => {
   return {

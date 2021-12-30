@@ -9,8 +9,7 @@ import { Spinner } from "../Spinner";
 
 import "./comics-page.scss";
 
-
-interface IParamsRouter {
+interface IParamsRouter extends Record<string, string | undefined> {
   id: string;
 }
 
@@ -18,7 +17,7 @@ interface IProps {
   comics: Array<Comic>;
   error: string;
   isLoading: boolean;
-  requestComicsInfo: (id: string) => void;
+  requestComicsInfo: (id: string | undefined) => void;
 }
 
 interface IComicPageItemProps {
@@ -27,36 +26,36 @@ interface IComicPageItemProps {
 }
 
 const ComicsPage = (props: IProps) => {
-  const { id } = useParams<IParamsRouter>()
-  const {requestComicsInfo, isLoading, comics} = props
+  const { id } = useParams<IParamsRouter>();
+  const { requestComicsInfo, isLoading, comics } = props;
   useEffect(() => {
     requestComicsInfo(id);
-  }, [id])
-    return (
-      <>
-        <div className="container">
-          <div className="comics-page">
-            <h2 className="comics-page__title">Comics</h2>
-            <div className="comics-page__content">
-              {isLoading ? (
-                <Spinner />
-              ) : (
-                <>
-                  {comics.map((comic) => (
-                    <ComicsPageItem
-                      key={comic.id}
-                      thumbnail={comic.thumbnail}
-                      description={comic.description}
-                    />
-                  ))}
-                </>
-              )}
-            </div>
+  }, [id]);
+  return (
+    <>
+      <div className="container">
+        <div className="comics-page">
+          <h2 className="comics-page__title">Comics</h2>
+          <div className="comics-page__content">
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                {comics.map((comic) => (
+                  <ComicsPageItem
+                    key={comic.id}
+                    thumbnail={comic.thumbnail}
+                    description={comic.description}
+                  />
+                ))}
+              </>
+            )}
           </div>
         </div>
-      </>
-    );
-}
+      </div>
+    </>
+  );
+};
 
 const ComicsPageItem = (props: IComicPageItemProps) => {
   const { description, thumbnail } = props;
@@ -67,7 +66,9 @@ const ComicsPageItem = (props: IComicPageItemProps) => {
         <div className="comics-page__item-img">
           <img src={`${srcImgComics}`} alt="img" />
         </div>
-        <div className="comics-page__item-descr">{description ? description : 'No description'}</div>
+        <div className="comics-page__item-descr">
+          {description ? description : "No description"}
+        </div>
       </div>
     </>
   );
@@ -83,11 +84,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    requestComicsInfo: (id: string) => dispatch(requestComicsInfo(id)),
+    requestComicsInfo: (id: string | undefined) =>
+      dispatch(requestComicsInfo(id)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ComicsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ComicsPage);

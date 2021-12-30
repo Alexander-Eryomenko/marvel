@@ -1,12 +1,11 @@
 import React from "react";
 import "./pageError.scss";
 import error from "../../img/error.jpg";
-import { withRouter } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const PageError = (props: any) => {
-  const errorPath = (
-    <span className="span-path">{props.location.pathname}</span>
-  );
+const PageError = () => {
+  const location = useLocation();
+  const errorPath = <span className="span-path">{location.pathname}</span>;
   return (
     <div className="container">
       <div className="img-wrapper">
@@ -17,4 +16,4 @@ const PageError = (props: any) => {
   );
 };
 
-export default withRouter(PageError);
+export default PageError;

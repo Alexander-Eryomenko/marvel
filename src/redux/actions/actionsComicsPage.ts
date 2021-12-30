@@ -4,7 +4,7 @@ export enum actionsComics {
   REQUEST_COMICS_INFO_FAIL = "REQUEST_COMICS_INFO_FAIL",
 }
 
-export const requestComicsInfo = (id: number | string) => {
+export const requestComicsInfo = (id: string | undefined) => {
   return {
     type: actionsComics.REQUEST_COMICS_INFO,
     payload: id,
