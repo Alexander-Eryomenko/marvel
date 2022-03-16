@@ -1,0 +1,1 @@
+export {MarvelApi} from './MarvelApi'

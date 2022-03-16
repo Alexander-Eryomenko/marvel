@@ -1,0 +1,33 @@
+.search-panel {
+  margin-top: 30px;
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    &-btn {
+      display: flex;
+      flex-basis: 40%;
+      justify-content: space-between;
+    }
+  }
+  &__input {
+    flex-basis: 70%;
+    input {
+      width: 100%;
+    }
+  }
+  &__btn {
+
+    &-sort {
+      margin-left: 30%;
+    }
+    &-search {
+      
+    }
+  }
+}
+
+.custom-input {
+  color: red;
+}
